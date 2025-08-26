@@ -1,7 +1,22 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { federation } from '@module-federation/vite'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  server: { port: 5175, origin: 'http://localhost:5175' },
+  base: '/',
+  plugins: [
+    federation({
+      name: 'gradeService',
+      filename: 'remoteEntry.js',
+      library: { type: 'module' },
+      exposes: { './App': './src/App.tsx' },
+      shared: {
+        react: { singleton: true, requiredVersion: '^19.0.0' },
+        'react-dom': { singleton: true, requiredVersion: '^19.0.0' },
+        'react-dom/client': { singleton: true, requiredVersion: '^19.0.0' },
+      },
+    }),
+  ],
+  resolve: { dedupe: ['react', 'react-dom'], conditions: ['browser', 'development'] },
+  build: { target: 'chrome89', modulePreload: false, commonjsOptions: { transformMixedEsModules: true } },
 })
