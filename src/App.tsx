@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 
 export default function App() {
     type Grade = { course: string; grade: string };
+    const [grades, setGrades] = React.useState<Grade[]>([]);
 
-    const [grades, setGrades] = useState<Grade[]>([]);
-
-    useEffect(() => {
+    React.useEffect(() => {
         fetch('http://localhost:3000/api/grades')
             .then(r => r.ok ? r.json() : [])
             .then(setGrades)
@@ -14,16 +13,16 @@ export default function App() {
     }, []);
 
     return (
-        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 12 }}>
-            <h3>Grade Service</h3>
-            <table>
-                <tbody>
-                {grades.map((g, i) => (
-                    <tr key={i}><td style={{paddingRight:8}}>{g.course}</td><td>{g.grade}</td></tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
+        <table className="table">
+            <tbody>
+            {grades.map((g, i) => (
+                <tr key={i}>
+                    <td>{g.course}</td>
+                    <td style={{textAlign:'right'}}>{g.grade}</td>
+                </tr>
+            ))}
+            </tbody>
+        </table>
     );
 }
 
