@@ -6,7 +6,7 @@ export default function App() {
     const [grades, setGrades] = React.useState<Grade[]>([]);
 
     React.useEffect(() => {
-        fetch('http://localhost:3000/api/grades')
+        fetch('https://bff.wab4.jf-homelab.de/api/grades')
             .then(r => r.ok ? r.json() : [])
             .then(setGrades)
             .catch(() => setGrades([{ course: 'Math', grade: '1.7 (demo)' }]));
